@@ -12,6 +12,7 @@ import jwt from 'jsonwebtoken';
 import IAccountCharacter from '../interface/IAccountCharacter';
 
 export default class AccountService {
+
     public static async save(i: IAccount): Promise<AppSuccess> {
         let count = await AccountModel.count({
             where: sequelize.where(sequelize.fn('lower', sequelize.col('user')), sequelize.fn('lower', i.user)),
@@ -43,30 +44,30 @@ export default class AccountService {
     }
 
     public static async authenticate(user: string, password: string): Promise<IAuthenticate> {
-        const account = (await AccountModel.findOne({
+        const find = (await AccountModel.findOne({
             attributes: ['id', 'user', 'password', 'role'], where: {
                 user: user,
             },
         })) as IAccount;
-        if (!account) {
+        if (!find) {
             throw new AppError(AppStatusEnum.AccountInvalidCredential, 'Impossível acessar, verifique e tente novamente.', 403);
         }
-        if (!this.decrypt(password, account.password as string)) {
+        if (!this.decrypt(password, find.password as string)) {
             throw new AppError(AppStatusEnum.AccountInvalidCredential, 'Impossível acessar, verifique e tente novamente.', 403);
         }
-        if (account.role === RoleEnum.Banned) {
+        if (find.role === RoleEnum.Banned) {
             throw new AppError(AppStatusEnum.AccountBanned, 'Impossível logar, a conta está banida.', 403);
         }
         const userUpdated = await AccountModel.update({
             authToken: Utils.randomString(100),
         }, {
             where: {
-                id: account.id,
+                id: find.id,
             }, returning: true,
         });
-        account.authToken = userUpdated[1][0].get().authToken;
+        find.authToken = userUpdated[1][0].get().authToken;
         const character = {} as IAccountCharacter;
-        const token = jwt.sign({account: account, character: character}, process.env.TOKEN_SECRET as string, {
+        const token = jwt.sign({account: find, character: character}, process.env.TOKEN_SECRET as string, {
             expiresIn: '1d',
         });
         return {

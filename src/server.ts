@@ -8,6 +8,7 @@ import errorMiddleware from './middleware/errorMiddleware';
 import AppSuccess from './shared/AppSuccess';
 import AppStatusEnum from './enum/AppStatusEnum';
 import {database} from './database/database';
+import session from 'express-session';
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use(helmet());
+
+app.use(session({secret: process.env.SESSION_SECRET as string, resave: true, saveUninitialized: true}));
 
 app.use(rateLimit({
     windowMs: 5 * 60 * 1000,

@@ -3,8 +3,8 @@ declare namespace Express {
         account: {
             id: number; role: string;
         };
-        character: {
-            id: number | null;
+        session: {
+            characterId: number | null;
         };
     }
 }

@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import AccountService from '../service/AccountService';
 
 export default class AccountController {
+
     public static async create(request: Request, response: Response, next: NextFunction) {
         try {
             const {user, password, email} = request.body;
@@ -15,10 +16,6 @@ export default class AccountController {
     }
 
     public static async find(request: Request, response: Response, next: NextFunction) {
-        // request.character = {
-        //     id: 1,
-        // }
-        console.log(request.character?.id);
         try {
             return response.status(200).json(await AccountService.get(request.account.id));
         } catch (error) {
