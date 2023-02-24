@@ -1,5 +1,8 @@
 import express from 'express';
-import {validateAccountCharacterCreate} from '../middleware/celebrate/accountCharacterCelebrate';
+import {
+    validateAccountCharacterCreate,
+    validateAccountCharacterDistributePoints
+} from '../middleware/celebrate/accountCharacterCelebrate';
 import authenticateMiddleware from '../middleware/authenticateMiddleware';
 import AccountCharacterController from '../controller/AccountCharacterController';
 import {validateSetId} from '../middleware/celebrate/commonCelebrate';
@@ -25,5 +28,9 @@ accountCharacterRouter
 accountCharacterRouter
     .route('/logout')
     .get(authenticateMiddleware, AccountCharacterController.logout);
+
+accountCharacterRouter
+    .route('/distribute-points')
+    .post(validateAccountCharacterDistributePoints(), authenticateMiddleware, AccountCharacterController.distributePoints);
 
 export default accountCharacterRouter;

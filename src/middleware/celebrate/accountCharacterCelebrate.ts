@@ -12,3 +12,15 @@ export const validateAccountCharacterCreate = () => {
         },
     }, {abortEarly: false});
 };
+
+export const validateAccountCharacterDistributePoints = () => {
+    return celebrate({
+        [Segments.BODY]: {
+            attribute: Joi.object({
+                strength: Joi.number().min(1).max(1000),
+                intelligence: Joi.number().min(1).max(1000),
+                dexterity: Joi.number().min(1).max(1000),
+            }).min(1).required(),
+        },
+    }, {abortEarly: false});
+};

@@ -53,4 +53,20 @@ export default class AccountCharacterController {
             .status(200)
             .json();
     }
+
+    public static async distributePoints(request: Request, response: Response, next: NextFunction) {
+        const {attribute} = request.body;
+        try {
+            const app = await AccountCharacterService.distributePoints({
+                accountId: request.account.id,
+                characterId: request.session.characterId ?? 0,
+                strength: attribute.strength,
+                intelligence: attribute.intelligence,
+                dexterity: attribute.dexterity,
+            });
+            return app.toJSON(response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
