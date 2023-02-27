@@ -9,6 +9,7 @@ import AppSuccess from './shared/AppSuccess';
 import AppStatusEnum from './enum/AppStatusEnum';
 import {database} from './database/database';
 import session from 'express-session';
+import logger from './utils/logger';
 
 const app = express();
 
@@ -35,7 +36,7 @@ app.use(errors());
 app.use(errorMiddleware);
 
 app.use((request: Request, response: Response) => {
-    console.log(`Route ${request.url} not found`);
+    logger.info(`Route ${request.url} not found`);
     return new AppSuccess(AppStatusEnum.RouteNotFound, 'Rota não encontrada', 404).toJSON(response);
 });
 

@@ -1,9 +1,11 @@
 import {NextFunction, Request, Response} from 'express';
 import AccountCharacterService from '../service/AccountCharacterService';
+import logger from '../utils/logger';
 
 export default class AccountCharacterController {
 
     public static async create(request: Request, response: Response, next: NextFunction) {
+        logger.info(`Create account character ${JSON.stringify(request.body)}`);
         try {
             const {characterId, name} = request.body;
             const app = await AccountCharacterService.save(request.account.id, {
@@ -16,6 +18,7 @@ export default class AccountCharacterController {
     }
 
     public static async findAll(request: Request, response: Response, next: NextFunction) {
+        logger.info(`Get all account characters ${request.account.id}`);
         try {
             return response
                 .status(200)
@@ -26,6 +29,7 @@ export default class AccountCharacterController {
     }
 
     public static async findOne(request: Request, response: Response, next: NextFunction) {
+        logger.info(`Get account character with session id ${request.session.characterId}`);
         try {
             return response
                 .status(200)
@@ -36,6 +40,7 @@ export default class AccountCharacterController {
     }
 
     public static async select(request: Request, response: Response, next: NextFunction) {
+        logger.info(`Select account character with id ${request.params.id}`);
         try {
             const find = await AccountCharacterService.get(+request.params.id, request.account.id);
             request.session.characterId = find.id ?? null;
@@ -48,6 +53,7 @@ export default class AccountCharacterController {
     }
 
     public static async logout(request: Request, response: Response, next: NextFunction) {
+        logger.info(`Logout account character ${request.session.characterId}`);
         request.session.characterId = null;
         return response
             .status(200)
@@ -55,8 +61,9 @@ export default class AccountCharacterController {
     }
 
     public static async distributePoints(request: Request, response: Response, next: NextFunction) {
-        const {attribute} = request.body;
+        logger.info(`Distribute points account character ${JSON.stringify(request.body)}`);
         try {
+            const {attribute} = request.body;
             const app = await AccountCharacterService.distributePoints({
                 accountId: request.account.id,
                 characterId: request.session.characterId ?? 0,

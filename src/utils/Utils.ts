@@ -1,5 +1,5 @@
 export class Utils {
-    public static randomString(length: number) {
+    public static randomString(length: number): string {
         let string = '';
         const randomChar = function () {
             const number = Math.floor(Math.random() * 62);
