@@ -18,13 +18,13 @@ export default class AccountService {
             where: sequelize.where(sequelize.fn('lower', sequelize.col('user')), sequelize.fn('lower', i.user)),
         });
         if (count) {
-            throw new AppError(AppStatusEnum.AccountUserAlreadyExists, 'Nome de usuário já cadastrado.', 400);
+            throw new AppError(AppStatusEnum.AccountUserAlreadyExists, 'Nome de usuário já cadastrado.');
         }
         count = await AccountModel.count({
             where: sequelize.where(sequelize.fn('lower', sequelize.col('email')), sequelize.fn('lower', i.email)),
         });
         if (count) {
-            throw new AppError(AppStatusEnum.AccountEmailAlreadyExists, 'E-mail já cadastrado.', 400);
+            throw new AppError(AppStatusEnum.AccountEmailAlreadyExists, 'E-mail já cadastrado.');
         }
         i.password = this.encrypt(i.password as string);
         await AccountModel.create(i as Optional<unknown, never>);

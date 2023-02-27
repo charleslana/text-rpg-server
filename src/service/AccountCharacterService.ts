@@ -17,7 +17,7 @@ export default class AccountCharacterService {
         await this.validateMaxCharacterExceeded(accountId, account.premiumDate ?? new Date());
         await this.validateNameAlreadyExists(character);
         await AccountCharacterModel.create({
-            accountId: accountId, characterId: character.id, name: character.name,
+            accountId: accountId, characterId: character.id, name: character.name, gender: character.gender,
         });
         return new AppSuccess(AppStatusEnum.AccountCharacterCreatedSuccess, 'Personagem criado com sucesso.', 201);
     }
@@ -50,7 +50,7 @@ export default class AccountCharacterService {
         const get = await this.get(i.characterId, i.accountId);
         const points = (i.strength ?? 0) + (i.intelligence ?? 0) + (i.dexterity ?? 0);
         if (Number(get.pointsLevel) < points) {
-            throw new AppError(AppStatusEnum.AccountCharacterDistributePointsInsufficient, 'Pontos de distribuir insuficiente.', 400);
+            throw new AppError(AppStatusEnum.AccountCharacterDistributePointsInsufficient, 'Pontos de distribuir insuficiente.');
         }
         await AccountCharacterModel.update({
             strength: sequelize.literal(`strength + ${i.strength ?? 0}`),
@@ -65,12 +65,25 @@ export default class AccountCharacterService {
         return new AppSuccess(AppStatusEnum.AccountCharacterDistributePointsSuccess, 'Pontos distribuídos com sucesso.');
     }
 
+    public static async delete(characterId: number, accountId: number): Promise<AppSuccess> {
+        const get = await this.get(characterId, accountId);
+        if (Number(get.level) >= 100) {
+            throw new AppError(AppStatusEnum.AccountCharacterDeletedNotAccepted, 'Você não pode remover um personagem com nível 100 ou mais.');
+        }
+        await AccountCharacterModel.destroy({
+            where: {
+                id: characterId,
+            },
+        });
+        return new AppSuccess(AppStatusEnum.AccountCharacterDeletedSuccess, 'Personagem excluído com sucesso.');
+    }
+
     private static async validateNameAlreadyExists(character: IAccountCharacter): Promise<void> {
         const count = await AccountCharacterModel.count({
             where: sequelize.where(sequelize.fn('lower', sequelize.col('name')), sequelize.fn('lower', character.name)),
         });
         if (count) {
-            throw new AppError(AppStatusEnum.AccountCharacterNameAlreadyExists, 'Nome já está em uso, tente outro.', 400);
+            throw new AppError(AppStatusEnum.AccountCharacterNameAlreadyExists, 'Nome já está em uso, tente outro.');
         }
     }
 
@@ -81,10 +94,10 @@ export default class AccountCharacterService {
             }
         });
         if (count >= 4 && premiumDate <= new Date()) {
-            throw new AppError(AppStatusEnum.AccountCharacterMaxCharacterExceeded, 'Você já atingiu o limite de personagens em sua conta.', 400);
+            throw new AppError(AppStatusEnum.AccountCharacterMaxCharacterExceeded, 'Você já atingiu o limite de personagens em sua conta.');
         }
         if (count >= 6) {
-            throw new AppError(AppStatusEnum.AccountCharacterMaxCharacterExceeded, 'Você já atingiu o limite de personagens em sua conta.', 400);
+            throw new AppError(AppStatusEnum.AccountCharacterMaxCharacterExceeded, 'Você já atingiu o limite de personagens em sua conta.');
         }
     }
 }

@@ -1,4 +1,5 @@
 import {celebrate, Joi, Segments} from 'celebrate';
+import GenderEnum from '../../enum/GenderEnum';
 
 export const validateAccountCharacterCreate = () => {
     return celebrate({
@@ -8,7 +9,9 @@ export const validateAccountCharacterCreate = () => {
                 .trim()
                 .min(3)
                 .max(20)
-                .required(), characterId: Joi.number().required(),
+                .required(),
+            characterId: Joi.number().required(),
+            gender: Joi.string().valid(...Object.values(GenderEnum)).required(),
         },
     }, {abortEarly: false});
 };

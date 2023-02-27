@@ -5,12 +5,8 @@ import {validateSetId} from '../middleware/celebrate/commonCelebrate';
 
 const characterRouter = express.Router();
 
-characterRouter
-    .route('/')
-    .get(authenticateMiddleware, CharacterController.findAll);
+characterRouter.route('/').get(authenticateMiddleware, CharacterController.findAll);
 
-characterRouter
-    .route('/:id')
-    .get(validateSetId(), authenticateMiddleware, CharacterController.findOne);
+characterRouter.route('/:id').get(validateSetId(), authenticateMiddleware, CharacterController.findOne);
 
 export default characterRouter;

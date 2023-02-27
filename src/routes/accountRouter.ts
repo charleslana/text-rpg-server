@@ -7,9 +7,7 @@ const accountRouter = express.Router();
 
 accountRouter.route('/').post(validateAccountCreate(), AccountController.create);
 
-accountRouter
-    .route('/')
-    .get(authenticateMiddleware, AccountController.find);
+accountRouter.route('/').get(authenticateMiddleware, AccountController.find);
 
 accountRouter.route('/login').post(validateLogin(), AccountController.login);
 

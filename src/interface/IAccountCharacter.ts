@@ -1,3 +1,5 @@
+import GenderEnum from '../enum/GenderEnum';
+
 export default interface IAccountCharacter {
     id?: number;
     name?: string;
@@ -8,4 +10,5 @@ export default interface IAccountCharacter {
     dexterity?: number;
     pointsLevel?: number;
     alz?: number;
+    gender?: GenderEnum;
 }

@@ -2,6 +2,7 @@ import {database} from '../database';
 import {DataTypes} from 'sequelize';
 import {CharacterModel} from './CharacterModel';
 import {AccountModel} from './AccountModel';
+import GenderEnum from '../../enum/GenderEnum';
 
 export const AccountCharacterModel = database.define('tb_account_character', {
     id: {
@@ -22,7 +23,10 @@ export const AccountCharacterModel = database.define('tb_account_character', {
         type: DataTypes.INTEGER, field: 'points_level', defaultValue: 10,
     }, alz: {
         type: DataTypes.BIGINT, defaultValue: 2000,
-    }, accountId: {
+    }, gender: {
+        type: DataTypes.ENUM(...Object.values(GenderEnum)), allowNull: false,
+    }
+    , accountId: {
         type: DataTypes.INTEGER, allowNull: false, onDelete: 'CASCADE', references: {
             model: AccountModel, key: 'id',
         }, field: 'account_id',

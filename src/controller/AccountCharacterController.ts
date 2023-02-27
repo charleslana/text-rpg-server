@@ -7,9 +7,9 @@ export default class AccountCharacterController {
     public static async create(request: Request, response: Response, next: NextFunction) {
         logger.info(`Create account character ${JSON.stringify(request.body)}`);
         try {
-            const {characterId, name} = request.body;
+            const {characterId, name, gender} = request.body;
             const app = await AccountCharacterService.save(request.account.id, {
-                id: characterId, name: name,
+                id: characterId, name: name, gender: gender,
             });
             return app.toJSON(response);
         } catch (error) {
@@ -71,6 +71,17 @@ export default class AccountCharacterController {
                 intelligence: attribute.intelligence,
                 dexterity: attribute.dexterity,
             });
+            return app.toJSON(response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    public static async delete(request: Request, response: Response, next: NextFunction) {
+        logger.info(`Delete character with id ${request.params.id}`);
+        try {
+            const {id} = request.params;
+            const app = await AccountCharacterService.delete(+id, request.account.id);
             return app.toJSON(response);
         } catch (error) {
             next(error);

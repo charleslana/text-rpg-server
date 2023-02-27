@@ -14,6 +14,8 @@ enum AppStatusEnum {
     AccountCharacterMaxCharacterExceeded = 'account.character.max.character.exceeded',
     AccountCharacterDistributePointsSuccess = 'account.character.distribute.points.success',
     AccountCharacterDistributePointsInsufficient = 'account.character.distribute.points.insufficient',
+    AccountCharacterDeletedSuccess = 'account.character.deleted.success',
+    AccountCharacterDeletedNotAccepted = 'account.character.deleted.not.accepted',
 }
 
 export default AppStatusEnum;
