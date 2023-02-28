@@ -20,7 +20,7 @@ const authenticateMiddleware = async (request: Request, _response: Response, nex
                 const decode = jwt.verify(token, process.env.TOKEN_SECRET as string);
                 if (decode) {
                     const {account} = decode as DecodeType;
-                    const userLogged = AccountService.getAuth(account.id, account.authToken);
+                    const userLogged = await AccountService.getAuth(account.id, account.authToken);
                     if (!userLogged) {
                         return handleUnauthorizedError(next);
                     }
