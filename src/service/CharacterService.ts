@@ -1,7 +1,7 @@
-import ICharacter from "../interface/ICharacter";
-import {CharacterModel} from "../database/models/CharacterModel";
-import AppError from "../shared/AppError";
-import AppStatusEnum from "../enum/AppStatusEnum";
+import ICharacter from '../interface/ICharacter';
+import {CharacterModel} from '../database/models/CharacterModel';
+import AppError from '../shared/AppError';
+import AppStatusEnum from '../enum/AppStatusEnum';
 
 export default class CharacterService {
 
