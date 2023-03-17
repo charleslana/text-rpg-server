@@ -10,6 +10,7 @@ import AppStatusEnum from './enum/AppStatusEnum';
 import {database} from './database/database';
 import session from 'express-session';
 import logger from './utils/logger';
+import CronJobService from './service/CronJobService';
 
 const app = express();
 
@@ -44,5 +45,6 @@ const port = process.env.PORT || 5000;
 
 app.listen(port, async () => {
     await database.sync();
+    CronJobService.start();
     console.log(`Started on port ${port}`);
 });

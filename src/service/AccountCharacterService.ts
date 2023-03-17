@@ -78,6 +78,10 @@ export default class AccountCharacterService {
         return new AppSuccess(AppStatusEnum.AccountCharacterDeletedSuccess, 'Personagem excluído com sucesso.');
     }
 
+    public static async recoveryLife(): Promise<void> {
+        console.log('recovery life');
+    }
+
     private static async validateNameAlreadyExists(character: IAccountCharacter): Promise<void> {
         const count = await AccountCharacterModel.count({
             where: sequelize.where(sequelize.fn('lower', sequelize.col('name')), sequelize.fn('lower', character.name)),
